@@ -49,10 +49,18 @@
 				</a> 
 				<a href="javascript:;" onclick="member_add('添加用户','skipuser','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe607;</i> 添加用户</a>
 			</span> 
-			<span class="r">共有数据：<strong>88</strong> 条</span> 
+			<span class="r">
+				<a href="javascript:;" onclick="tableToExcel('item','data')" class="btn btn-primary-outline radius" data-toggle="tooltip" title="根据页面搜索结果导出">
+					<i class="Hui-iconfont">&#xe644;</i> 批量导出
+				</a>
+				<a href="javascript:;" onclick="" class="btn btn-primary-outline radius">
+					<i class="Hui-iconfont">&#xe645;</i> 批量导入
+				</a>
+			</span>
+			<!-- <span class="r">共有数据：<strong>88</strong> 条</span>  -->
 		</div>	
 		<div class="mt-20">
-			<table class="table table-border table-bordered table-hover table-bg table-sort">
+			<table class="table table-border table-bordered table-hover table-bg table-sort" id="item">
 					<thead>
 						<tr class="text-c">
 							<th width="25"><input type="checkbox" name="" value=""></th>
@@ -124,6 +132,30 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script> 
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+    function base64 (content) {
+       return window.btoa(unescape(encodeURIComponent(content)));         
+    }
+    /*
+    *@tableId: table的Id
+    *@fileName: 要生成excel文件的名字（不包括后缀，可随意填写）
+    */
+    function tableToExcel(tableID,fileName){
+      var table = document.getElementById(tableID);
+      var excelContent = table.innerHTML;
+      var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:x='urn:schemas-microsoft-com:office:excel' xmlns='http://www.w3.org/TR/REC-html40'>";
+      excelFile += "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>";
+      excelFile += "<body><table>";
+      excelFile += excelContent;
+      excelFile += "</table></body>";
+      excelFile += "</html>";
+      var link = "data:application/vnd.ms-excel;base64," + base64(excelFile);
+      var a = document.createElement("a");
+      a.download = fileName+".xls";
+      a.href = link;
+      a.click();
+    }
+</script>
 <script type="text/javascript">
 $(function(){
 	$('.table-sort').dataTable({

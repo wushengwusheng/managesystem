@@ -43,10 +43,12 @@ public class RegisterServlet extends HttpServlet{
                 session.setAttribute("name", username);
                 
                 //获取转发对象
-                rd = request.getRequestDispatcher("login.jsp");
+                //rd = request.getRequestDispatcher("login.jsp");
                 
                 // 转发请求
-                rd.forward(request, response);
+                //rd.forward(request, response);
+                
+                response.sendRedirect("login.jsp");
             }
             
         }catch(Exception e) {

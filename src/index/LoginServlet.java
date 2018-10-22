@@ -28,8 +28,9 @@ public class LoginServlet extends HttpServlet{
             if(rs.getString("password").equals(pass)) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("name", username); 
-                rd = request.getRequestDispatcher("index.jsp"); 
-                rd.forward(request, response);
+                /*rd = request.getRequestDispatcher("index.jsp"); 
+                rd.forward(request, response);*/
+                response.sendRedirect("index.jsp");
             }else{
                 errMsg += "ÃÜÂë´íÎó£¬ÇëÖØĞÂÊäÈë";
             }

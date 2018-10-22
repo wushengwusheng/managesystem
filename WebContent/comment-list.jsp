@@ -41,7 +41,7 @@
 		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
 			<span class="l">
 				<a href="javascript:;" onclick="member_start()" class="btn btn-success radius">
-					<i class="Hui-iconfont">&#xe6a1;</i> 批量审核
+					<i class="Hui-iconfont">&#xe615;</i> 批量审核
 				</a>
 				<a href="javascript:;" onclick="datadel()" class="btn btn-danger radius">
 					<i class="Hui-iconfont">&#xe6e2;</i> 批量删除
@@ -117,6 +117,7 @@
 <script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script> 
 <script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
 $(function(){
 	$('.table-sort').dataTable({
@@ -128,7 +129,22 @@ $(function(){
 		]
 	});
 	
+	var $backToTopEle=$('<a href="javascript:void(0)" class="Hui-iconfont toTop" title="返回顶部" alt="返回顶部" style="display:none">&#xe684;</a>').appendTo($("body")).click(function(){
+		$("html, body").animate({ scrollTop: 0 }, 120);
+	});
+	var backToTopFun = function() {
+		var st = $(document).scrollTop(), winh = $(window).height();
+		(st > 0)? $backToTopEle.show(): $backToTopEle.hide();
+		/*IE6下的定位*/
+		if(!window.XMLHttpRequest){
+			$backToTopEle.css("top", st + winh - 166);
+		}
+	};
 });
+$(function(){
+	$(window).on("scroll",backToTopFun);
+	backToTopFun()
+	});
 /*用户-添加*/
 function member_add(title,url,w,h){
 	layer_show(title,url,w,h);
@@ -270,6 +286,8 @@ function member_start(){
 		});
 	}
 }
+
+
 </script> 
 </body>
 </html>
