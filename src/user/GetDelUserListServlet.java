@@ -55,19 +55,19 @@ public class GetDelUserListServlet extends HttpServlet {
 		        // 查询结果集
 		        ps = conn.prepareStatement("select * from user_detail where isdelete=2");
 	        }else if(username!="" && phone=="" && email==""){
-	        	ps = conn.prepareStatement("select * from user_detail where username ='"+username+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where username like '"+"%"+username+"%"+"' and isdelete=2");
 	        }else if(username=="" && phone!="" && email==""){
-	        	ps = conn.prepareStatement("select * from user_detail where phone ='"+phone+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where phone like '"+"%"+phone+"%"+"' and isdelete=2");
 	        }else if(username=="" && phone=="" && email!=""){
-	        	ps = conn.prepareStatement("select * from user_detail where email ='"+email+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where email like '"+"%"+email+"%"+"' and isdelete=2");
 	        }else if(username!="" && phone!="" && email==""){
-	        	ps = conn.prepareStatement("select * from user_detail where username ='"+username+"' and phone ='"+phone+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where username like '"+"%"+username+"%"+"' and phone like '"+"%"+phone+"%"+"' and isdelete=2");
 	        }else if(username!="" && phone=="" && email!=""){
-	        	ps = conn.prepareStatement("select * from user_detail where username ='"+username+"' and email ='"+email+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where username like '"+"%"+username+"%"+"' and email like '"+"%"+email+"%"+"' and isdelete=2");
 	        }else if(username=="" && phone!="" && email!=""){
-	        	ps = conn.prepareStatement("select * from user_detail where phone ='"+phone+"' and email='"+email+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where phone like '"+phone+"' and email like '"+"%"+email+"%"+"' and isdelete=2");
 	        }else if(username!="" && phone!="" && email!=""){
-	        	ps = conn.prepareStatement("select * from user_detail where username ='"+username+"' and phone ='"+phone+"' and email='"+email+"' and isdelete=2");
+	        	ps = conn.prepareStatement("select * from user_detail where username like '"+"%"+username+"%"+"' and phone like '"+"%"+phone+"%"+"' and email like '"+"%"+email+"%"+"' and isdelete=2");
 	        }
 			
 			rs = ps.executeQuery();

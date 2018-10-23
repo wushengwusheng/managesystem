@@ -53,7 +53,7 @@
 				<a href="javascript:;" onclick="tableToExcel('item','data')" class="btn btn-primary-outline radius" data-toggle="tooltip" title="根据页面搜索结果导出">
 					<i class="Hui-iconfont">&#xe644;</i> 批量导出
 				</a>
-				<a href="javascript:;" onclick="" class="btn btn-primary-outline radius">
+				<a href="javascript:;" onclick="member_add('批量添加用户','UserManage/members-add.jsp','','510')" class="btn btn-primary-outline radius" data-toggle="tooltip" title="点击导出xuanz">
 					<i class="Hui-iconfont">&#xe645;</i> 批量导入
 				</a>
 			</span>
@@ -166,7 +166,9 @@ $(function(){
 		  {"orderable":false,"aTargets":[0,8,9]}// 制定列不参与排序
 		]
 	});
-	
+
+	//返回顶部
+	$.Huitotop();
 });
 /*用户-添加*/
 function member_add(title,url,w,h){

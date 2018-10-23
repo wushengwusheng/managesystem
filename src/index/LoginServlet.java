@@ -23,17 +23,23 @@ public class LoginServlet extends HttpServlet{
         DbDao dd = new DbDao("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/managesystem",
                 "root", "root");
         
-        ResultSet rs = dd.query("select password from login where username = ?", username);
+        ResultSet rs = dd.query("select password,isdelete from user_detail where username = ?", username);
         if(rs.next()){
-            if(rs.getString("password").equals(pass)) {
-                HttpSession session = request.getSession(true);
-                session.setAttribute("name", username); 
-                /*rd = request.getRequestDispatcher("index.jsp"); 
-                rd.forward(request, response);*/
-                response.sendRedirect("index.jsp");
-            }else{
-                errMsg += "密码错误，请重新输入";
-            }
+        	if(rs.getInt("isdelete")==0) {
+        		if(rs.getString("password").equals(pass)) {
+                    HttpSession session = request.getSession(true);
+                    session.setAttribute("name", username); 
+                    /*rd = request.getRequestDispatcher("index.jsp"); 
+                    rd.forward(request, response);*/
+                    response.sendRedirect("index.jsp");
+                }else{
+                    errMsg += "密码错误，请重新输入";
+                }
+        	}else if(rs.getInt("isdelete")==1){
+        		errMsg += "该用户已禁用，详情咨询管理员";
+        	}else if(rs.getInt("isdelete")==2) {
+        		errMsg += "该用户已删除，详情咨询管理员";
+        	}
         }else{
             errMsg += "该用户不存在";
         }
