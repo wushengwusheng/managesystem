@@ -52,7 +52,7 @@
 				<li class="dropDown dropDown_hover">
 					<a href="#" class="dropDown_A"><%=username %> <i class="Hui-iconfont">&#xe6d5;</i></a>
 					<ul class="dropDown-menu menu radius box-shadow">
-						<li><a href="javascript:;" onClick="myselfinfo()">个人信息</a></li>
+						<li><a href="javascript:;" onClick="member_show('个人信息','','','510')">个人信息</a></li>
 						<li><a href="#">切换账户</a></li>
 						<li><a href="logout">退出</a></li>
 				</ul>
@@ -213,16 +213,8 @@ $(function(){
 	});*/
 });
 /*个人信息*/
-function myselfinfo(){
-	layer.open({
-		type: 1,
-		area: ['300px','200px'],
-		fix: false, //不固定
-		maxmin: true,
-		shade:0.4,
-		title: '查看信息',
-		content: '<div>管理员信息</div>'
-	});
+function member_show(title,url,w,h){
+	layer_show(title,url,w,h);
 }
 
 /*资讯-添加*/
@@ -259,17 +251,5 @@ function member_add(title,url,w,h){
 
 
 </script> 
-
-<!--此乃百度统计代码，请自行删除-->
-<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>
-<!--/此乃百度统计代码，请自行删除-->
 </body>
 </html>

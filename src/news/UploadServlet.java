@@ -3,8 +3,6 @@ package news;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
  
 import javax.servlet.ServletException;
@@ -16,143 +14,96 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-
-import java.sql.*;
  
 
 /**
  * Servlet implementation class UploadServlet
  */
-@WebServlet(name="addsinglenews", urlPatterns={"/addsinglenews"})
-public class AddSingleNewsServlet extends HttpServlet {
+@WebServlet(name="UploadServlet", urlPatterns={"/UploadServlet"})
+public class UploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
      
-    // ÉÏ´«ÎÄ¼ş´æ´¢Ä¿Â¼
+    // ä¸Šä¼ æ–‡ä»¶å­˜å‚¨ç›®å½•
     private static final String UPLOAD_DIRECTORY = "upload";
  
-    // ÉÏ´«ÅäÖÃ
+    // ä¸Šä¼ é…ç½®
     private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
     private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
     private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
  
     /**
-     * ÉÏ´«Êı¾İ¼°±£´æÎÄ¼ş
+     * ä¸Šä¼ æ•°æ®åŠä¿å­˜æ–‡ä»¶
      */
     protected void doPost(HttpServletRequest request,
         HttpServletResponse response) throws ServletException, IOException {
-    	
-    	Connection conn = null;
-    	request.setCharacterEncoding("utf-8");
-    	int newsid = Integer.parseInt(request.getParameter("newsid").trim());
-    	String title = request.getParameter("title");
-    	String brief_intro = request.getParameter("brief_intro");
-    	String type = request.getParameter("type");
-    	String content = request.getParameter("content");
-    	String write = request.getParameter("brief_intro");
-    	String part = request.getParameter("part");
-    	//String brief_intro = request.getParameter("brief_intro");
-    	int status = Integer.parseInt(request.getParameter("status").trim());
-    	SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//è®¾ç½®æ—¥æœŸæ ¼å¼
-		String date = df.format(new Date());
-		
-        // ¼ì²âÊÇ·ñÎª¶àÃ½ÌåÉÏ´«
+        // æ£€æµ‹æ˜¯å¦ä¸ºå¤šåª’ä½“ä¸Šä¼ 
         if (!ServletFileUpload.isMultipartContent(request)) {
-            // Èç¹û²»ÊÇÔòÍ£Ö¹
+            // å¦‚æœä¸æ˜¯åˆ™åœæ­¢
             PrintWriter writer = response.getWriter();
-            writer.println("Error: ±íµ¥±ØĞë°üº¬ enctype=multipart/form-data");
+            writer.println("Error: è¡¨å•å¿…é¡»åŒ…å« enctype=multipart/form-data");
             writer.flush();
             return;
         }
  
-        // ÅäÖÃÉÏ´«²ÎÊı
+        // é…ç½®ä¸Šä¼ å‚æ•°
         DiskFileItemFactory factory = new DiskFileItemFactory();
-        // ÉèÖÃÄÚ´æÁÙ½çÖµ - ³¬¹ıºó½«²úÉúÁÙÊ±ÎÄ¼ş²¢´æ´¢ÓÚÁÙÊ±Ä¿Â¼ÖĞ
+        // è®¾ç½®å†…å­˜ä¸´ç•Œå€¼ - è¶…è¿‡åå°†äº§ç”Ÿä¸´æ—¶æ–‡ä»¶å¹¶å­˜å‚¨äºä¸´æ—¶ç›®å½•ä¸­
         factory.setSizeThreshold(MEMORY_THRESHOLD);
-        // ÉèÖÃÁÙÊ±´æ´¢Ä¿Â¼
+        // è®¾ç½®ä¸´æ—¶å­˜å‚¨ç›®å½•
         factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
  
         ServletFileUpload upload = new ServletFileUpload(factory);
          
-        // ÉèÖÃ×î´óÎÄ¼şÉÏ´«Öµ
+        // è®¾ç½®æœ€å¤§æ–‡ä»¶ä¸Šä¼ å€¼
         upload.setFileSizeMax(MAX_FILE_SIZE);
          
-        // ÉèÖÃ×î´óÇëÇóÖµ (°üº¬ÎÄ¼şºÍ±íµ¥Êı¾İ)
+        // è®¾ç½®æœ€å¤§è¯·æ±‚å€¼ (åŒ…å«æ–‡ä»¶å’Œè¡¨å•æ•°æ®)
         upload.setSizeMax(MAX_REQUEST_SIZE);
         
-        // ÖĞÎÄ´¦Àí
+        // ä¸­æ–‡å¤„ç†
         upload.setHeaderEncoding("UTF-8"); 
 
-        // ¹¹ÔìÁÙÊ±Â·¾¶À´´æ´¢ÉÏ´«µÄÎÄ¼ş
-        // Õâ¸öÂ·¾¶Ïà¶Ôµ±Ç°Ó¦ÓÃµÄÄ¿Â¼
+        // æ„é€ ä¸´æ—¶è·¯å¾„æ¥å­˜å‚¨ä¸Šä¼ çš„æ–‡ä»¶
+        // è¿™ä¸ªè·¯å¾„ç›¸å¯¹å½“å‰åº”ç”¨çš„ç›®å½•
         String uploadPath = "E:\\eclipse-workspace\\manage\\WebContent" + File.separator + UPLOAD_DIRECTORY;
         //System.out.println(getServletContext().getRealPath("/"));
         //System.out.println(File.separator);
        
          
-        // Èç¹ûÄ¿Â¼²»´æÔÚÔò´´½¨
+        // å¦‚æœç›®å½•ä¸å­˜åœ¨åˆ™åˆ›å»º
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
  
         try {
-            // ½âÎöÇëÇóµÄÄÚÈİÌáÈ¡ÎÄ¼şÊı¾İ
+            // è§£æè¯·æ±‚çš„å†…å®¹æå–æ–‡ä»¶æ•°æ®
             @SuppressWarnings("unchecked")
             List<FileItem> formItems = upload.parseRequest(request);
  
             if (formItems != null && formItems.size() > 0) {
-                // µü´ú±íµ¥Êı¾İ
+                // è¿­ä»£è¡¨å•æ•°æ®
                 for (FileItem item : formItems) {
-                    // ´¦Àí²»ÔÚ±íµ¥ÖĞµÄ×Ö¶Î
+                    // å¤„ç†ä¸åœ¨è¡¨å•ä¸­çš„å­—æ®µ
                     if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
-                        // ÔÚ¿ØÖÆÌ¨Êä³öÎÄ¼şµÄÉÏ´«Â·¾¶
+                        // åœ¨æ§åˆ¶å°è¾“å‡ºæ–‡ä»¶çš„ä¸Šä¼ è·¯å¾„
                         System.out.println(filePath);
-                        // ±£´æÎÄ¼şµ½Ó²ÅÌ
+                        // ä¿å­˜æ–‡ä»¶åˆ°ç¡¬ç›˜
                         item.write(storeFile);
                         request.setAttribute("message",
-                            "ÎÄ¼şÉÏ´«³É¹¦!");
+                            "æ–‡ä»¶ä¸Šä¼ æˆåŠŸ!");
                     }
                 }
             }
         } catch (Exception ex) {
             request.setAttribute("message",
-                    "´íÎóĞÅÏ¢: " + ex.getMessage());
+                    "é”™è¯¯ä¿¡æ¯: " + ex.getMessage());
         }
-        
-        try {
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/managesystem","root","root");
-			
-	        ps = conn.prepareStatement("update comment set comments_email = '"+email+"' , comments_content = '"+comment+"' , comments_status = "+isdelete+" where id ="+commentid+"");
-			
-			int i = ps.executeUpdate();
-			if(i==1) {
-				errMsg="¸üĞÂÆÀÂÛ³É¹¦";
-			}else {
-				errMsg="¸üĞÂÆÀÂÛÊ§°Ü";
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				if(rs != null){
-					rs.close();
-				}
-				if(ps!=null){
-					ps.close();
-				}
-				if(conn!=null){
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}	
-		}
-        
-        // Ìø×ªµ½ message.jsp
-        getServletContext().getRequestDispatcher("NewsManage/message.jsp").forward(
+        // è·³è½¬åˆ° message.jsp
+        getServletContext().getRequestDispatcher("/message.jsp").forward(
                 request, response);
     }
 }

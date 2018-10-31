@@ -42,7 +42,7 @@ public class AddSingleUserServlet extends HttpServlet {
 		String address =req.getParameter("address");
 		String comment = req.getParameter("comment");
 		String errMsg="";
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//璁剧疆鏃ユ湡鏍煎紡
 		String date = df.format(new Date());
 	    
 		try {
@@ -50,11 +50,11 @@ public class AddSingleUserServlet extends HttpServlet {
 	                "root", "root");
 	        ResultSet rs = dd.query("select password from login where username = ?", username);
 	        if(rs.next()) {
-	            errMsg += "用户名已存在";
+	            errMsg += "鐢ㄦ埛鍚嶅凡瀛樺湪";
 	        }else {
 	            boolean addUser = dd.insert("insert into login(username, password) values(?, ?)",username, password) && dd.insert("insert into user_detail(username, sex, password, phone, email, address,registtime,comment) values(?, ?, ?, ?,?, ?, ?,?)",username, sex, password, phone, email, address,date,comment);
 	            if(!addUser) {
-	                errMsg += "娣诲姞鐢ㄦ埛澶辫触";
+	                errMsg += "濞ｈ濮為悽銊﹀煕婢惰精瑙�";
 	            }
 	            req.setAttribute("err", errMsg);
 				req.getRequestDispatcher("UserManage/member-add.jsp").forward(req, resp);

@@ -25,7 +25,7 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal" id="form-admin-add">
+	<form class="form form-horizontal" id="" action="addsinglenews" enctype="multipart/form-data" method="post">
 	<div class="row cl">
 					<div class="formControls col-xs-8 col-sm-9">
 						<input type="hidden" class="input-text" value="" id="newsid" name="newsid">
@@ -136,55 +136,6 @@ $(function(){
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
-	});
-	
-	$("#form-admin-add").validate({
-		rules:{
-			adminName:{
-				required:true,
-				minlength:4,
-				maxlength:16
-			},
-			password:{
-				required:true,
-			},
-			password2:{
-				required:true,
-				equalTo: "#password"
-			},
-			sex:{
-				required:true,
-			},
-			phone:{
-				required:true,
-				isPhone:true,
-			},
-			email:{
-				required:true,
-				email:true,
-			},
-			adminRole:{
-				required:true,
-			},
-		},
-		onkeyup:false,
-		focusCleanup:true,
-		success:"valid",
-		submitHandler:function(form){
-			$(form).ajaxSubmit({
-				type: 'post',
-				url: "xxxxxxx" ,
-				success: function(data){
-					layer.msg('添加成功!',{icon:1,time:1000});
-				},
-                error: function(XmlHttpRequest, textStatus, errorThrown){
-					layer.msg('error!',{icon:1,time:1000});
-				}
-			});
-			var index = parent.layer.getFrameIndex(window.name);
-			parent.$('.btn-refresh').click();
-			parent.layer.close(index);
-		}
 	});
 	
 	$("#file-2").change(function(){
